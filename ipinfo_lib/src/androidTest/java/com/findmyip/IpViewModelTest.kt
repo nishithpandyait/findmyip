@@ -4,16 +4,26 @@ package com.findmyip
 
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.lifecycle.Observer
+import com.findmyip.data.repository.IpRepositoryImpl
 import com.findmyip.domain.IpRepository
 import com.findmyip.domain.model.IpInfo
 import com.findmyip.presentation.viewmodel.IpViewModel
 import com.google.gson.Gson
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import io.mockk.coEvery
+import io.mockk.impl.annotations.MockK
+import io.mockk.mockk
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertFalse
 import junit.framework.TestCase.assertNull
+import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.TestDispatcher
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -26,10 +36,11 @@ class IpViewModelTest {
 
     @get:Rule
     var hiltRule = HiltAndroidRule(this)
+    val testDispatcher: TestDispatcher = UnconfinedTestDispatcher()
 
-    @Inject
-    lateinit var ipRepository: IpRepository
 
+     var ipRepository: IpRepository = mockk<IpRepositoryImpl>()
+     val viewModel = IpViewModel(ipRepository)
     @get:Rule
     val rule = InstantTaskExecutorRule()
     val gson = Gson()
@@ -39,33 +50,32 @@ class IpViewModelTest {
     }
 
     @Test
-    fun fetchIpInfoSuccess() = runBlocking {
+    fun fetchIpInfoSuccess() = runTest(testDispatcher) {
 
         val mockIpInfo = gson.fromJson<IpInfo>(jsonStringResponse, IpInfo::class.java)
 
-        Mockito.`when`(ipRepository.getIpInfo()).thenReturn(mockIpInfo)
+        coEvery { ipRepository.getIpInfo() } returns mockIpInfo
 
-        val viewModel = IpViewModel(ipRepository)
-        viewModel.fetchIpInfo()
-
-       // assertEquals(mockIpInfo, viewModel.ipInfo.value)
-        assertNull(viewModel.error.value)
-        assertFalse(viewModel.loading.value!!)
+        viewModel.ipInfo.observeForever(Observer {
+            assertEquals(mockIpInfo,  viewModel.ipInfo.value)
+            assertNull(viewModel.error.value)
+            assertFalse(viewModel.loading.value!!)
+        })
     }
 
     @Test
-    fun fetchIpInfoFailure() = runBlocking {
+    fun fetchIpInfoFailure() = runTest (testDispatcher){
         val errorMessage = "Network error"
-        Mockito.`when`(ipRepository.getIpInfo()).thenAnswer {
-            throw IOException(errorMessage)
-        }
+        coEvery { ipRepository.getIpInfo() } throws IOException(errorMessage)
 
-        val viewModel = IpViewModel(ipRepository)
         viewModel.fetchIpInfo()
 
-        assertNull(viewModel.ipInfo.value)
-        assertEquals(errorMessage, viewModel.error.value)
-        assertFalse(viewModel.loading.value!!)
+        viewModel.ipInfo.observeForever(Observer {
+            assertNull(viewModel.ipInfo.value)
+            assertEquals(errorMessage, viewModel.error.value)
+            assertFalse(viewModel.loading.value!!)
+        })
+
     }
 
     companion object{

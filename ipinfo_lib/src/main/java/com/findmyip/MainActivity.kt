@@ -43,12 +43,14 @@ class MainActivity : ComponentActivity() {
 
                     isLoading?.let {
                         if (it) {
-                            Box(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+                            Box(modifier = Modifier.fillMaxSize().padding(16.dp),
+                                contentAlignment = Alignment.Center) {
                                 CircularProgressIndicator()
                             }
                         } else {
                             if (error != null) {
-                                Box(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+                                Box(modifier = Modifier.fillMaxSize().padding(16.dp),
+                                    contentAlignment = Alignment.Center) {
                                     Column {
                                         Text(text = "Error: $error", modifier = Modifier.padding(16.dp))
                                         Button(onClick = { viewModel.fetchIpInfo() },modifier = Modifier.padding(16.dp).size(100.dp, 50.dp)
