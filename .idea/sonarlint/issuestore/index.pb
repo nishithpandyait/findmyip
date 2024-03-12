@@ -1,0 +1,25 @@
+
+@
+build.gradle.kts,d\b\dbcff70658daf80b53ce624f6adcaa529df5ed8d
+A
+gradle.properties,2\a\2afbb999f001938c88fa43fc2ef52abf0f8213e4
+@
+local.properties,0\7\0712df971a99ac4d2fccb8e0fb19f377f3374cca
+C
+settings.gradle.kts,7\4\749edfcc96398253e5b3416184e95c46621da850
+X
+(gradle/wrapper/gradle-wrapper.properties,f\b\fbe448ebfc3eb2d4e308f6b8b043666f5b57235e
+q
+Alibraryconsumer/src/main/java/com/libraryconsumer/MainActivity.kt,1\7\17417fd523e881b1423539bc07eaa2de6ba8e613
+\
+,libraryconsumer/src/main/AndroidManifest.xml,4\f\4f8c4efb1ad6fbf60c08aa87b4104d959f737459
+P
+ libraryconsumer/build.gradle.kts,8\d\8dde08df60aacbd8f55a1ba52b2c6a63bbb5a0b1
+h
+8libraryconsumer/src/main/java/com/libraryconsumer/App.kt,e\9\e9e9b56a3106a132ef69315f79679aa0fd684c29
+K
+ipinfo_lib/build.gradle.kts,6\4\645246e2eae76e7bf0226035d95f951345db5fd5
+W
+'ipinfo_lib/src/main/AndroidManifest.xml,5\7\57c5b4d237bcde4fa50cb92d99fb50d2a1a837b8
+e
+5ipinfo_lib/src/main/java/com/findmyip/MainActivity.kt,4\a\4a84d9b0bf9d3cb5ae2b9815d1a1e6a36ce5b2c6
